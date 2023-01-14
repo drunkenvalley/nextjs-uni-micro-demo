@@ -1,0 +1,37 @@
+$snow: #FFF9FB;
+$gray: #bec1ca;
+$dark: #252627;
+$blue: #0066cc;
+$fire: #BB0A21;
+
+$colors: (
+    snow: $snow,
+    gray: $gray,
+    dark: $dark,
+    blue: $blue,
+    fire: $fire,
+) !default;
+
+// Generic media breakpoints used widely on the internet.
+$breakpoints: (
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+) !default;
+
+$directions: (
+    "x": inline,
+    "y": block,
+    "s": inline-start,
+    "e": inline-end,
+    "t": block-start,
+    "b": block-end,
+) !default;
+
+$spacing-multiplier: (
+    1: .5,
+    2: 1,
+    3: 2,
+    4: 4,
+) !default;

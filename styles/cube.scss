@@ -1,0 +1,33 @@
+@use "variables.scss" as *;
+@use "mixins.scss" as *;
+
+/* Composition */
+.grid {
+    @include all-media {
+        display: grid;
+    }
+}
+
+/* Utility */
+
+.text {
+    @include use-map ($colors) using ($value) {
+        color: $value;
+    }
+}
+
+.bg {
+    @include use-map ($colors) using ($value) {
+        background-color: $value;
+    }
+}
+
+.m { @include all-spacing($spacing-multiplier, "margin"); }
+.p { @include all-spacing($spacing-multiplier, "padding"); }
+
+.mr { @include all-spacing($spacing-multiplier, "margin", $unit: "em"); }   // "Intuitively", the 'r' here is for 'relative'... 
+.pr { @include all-spacing($spacing-multiplier, "padding", $unit: "em"); }  // It changes with the size of the element it's in.
+
+/* Block */
+
+/* Exception */

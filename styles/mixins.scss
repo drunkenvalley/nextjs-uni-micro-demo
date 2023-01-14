@@ -1,0 +1,51 @@
+@use "variables.scss" as *;
+
+@mixin use-map ($map) {
+    @each $name, $value in $map {
+        &-#{$name} {
+            @content($value);
+        }
+    }
+}
+
+@mixin media ($breakpoint) {
+    @media (min-width: #{map-get($map: $breakpoints, $key: $breakpoint)}) {
+        @content();
+    }
+}
+
+@mixin all-media ($breakpoints-map: $breakpoints) {
+    @content();
+
+    @each $breakpoint, $width in $breakpoints-map {
+        @media (min-width: #{$width}) {
+            &-#{$breakpoint} {
+                @content();
+            }
+        }
+    }
+}
+
+@mixin all-directions ($property, $value, $directions-map: $directions, $prefix: "-", $suffix: "") {
+    &#{$prefix}#{$suffix} {
+        #{$property}: #{$value} !important;
+    }
+
+    @each $name, $direction in $directions-map {
+        &#{$prefix}#{$name}#{$suffix} {
+            #{$property}-#{$direction}: #{$value} !important;
+        }
+    }
+}
+
+@mixin all-spacing ($map, $property, $unit: "rem") {
+    @each $name, $value in $map {
+        @include all-directions($property, #{$value}#{$unit}, $prefix: "", $suffix: "-#{$name}");
+    }
+}
+
+@mixin hover {
+    &:hover, &:focus {
+        @content();
+    }
+}
