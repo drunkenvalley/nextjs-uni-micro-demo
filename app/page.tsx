@@ -4,8 +4,11 @@ export default function Page() {
             <h1>
                 Hello world
             </h1>
-            <h2>This is a test demo. It will have a <a href="google.com">&bull; link to somewhere</a> else on the internet!</h2>
-            <button type="button">Smash me</button>
+            <h2>
+                This is a test demo. It will have a <a className="link" href="google.com">link to somewhere</a> else on the internet!
+                <br />
+                <button className="button" type="button">Smash me</button>
+            </h2>
         </>
     )
 }

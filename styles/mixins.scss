@@ -1,5 +1,8 @@
 @use "variables.scss" as *;
 
+// Maybe slightly misleading name; this is mixins and functions.
+// It just seems a bit contrived to separate them.
+
 @mixin use-map ($map) {
     @each $name, $value in $map {
         &-#{$name} {
@@ -48,4 +51,13 @@
     &:hover, &:focus {
         @content();
     }
+}
+
+@function get-color($color) {
+    @return map-get($map: $colors, $key: $color);
+}
+
+@function get-size($multiplier, $unit: "rem") {
+    $val: map-get($map: $spacing-multiplier, $key: $multiplier);
+    @return #{$val}#{$unit};
 }

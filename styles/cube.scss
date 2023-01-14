@@ -9,6 +9,10 @@
 }
 
 /* Utility */
+body {
+    font-family: var(--font-poppins);
+    font-weight: 200;
+}
 
 .text {
     @include use-map ($colors) using ($value) {
@@ -29,5 +33,52 @@
 .pr { @include all-spacing($spacing-multiplier, "padding", $unit: "em"); }  // It changes with the size of the element it's in.
 
 /* Block */
+.button {
+    position: relative;
+    background-color: transparent;
+    color: get-color("blue");
+    border-width: .05em;
+    border-color: currentColor;
+    padding: get-size(1);
+
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 100%;
+        background-color: currentColor;
+        transition: all 100ms ease-in-out;
+    }
+
+    @include hover {
+        &::before {
+            top: calc(100% - .2em);
+        }
+    }
+}
+
+.link {
+    position: relative;
+    text-decoration: none;
+    outline-offset: .25em;
+
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 100%;
+        height: .05em;
+        background-color: currentColor;
+        transition: all 100ms ease-in-out;
+    }
+    @include hover {
+        &::before {
+            right: max(calc(100% - 3ch), 40%);
+        }
+    }
+}
 
 /* Exception */

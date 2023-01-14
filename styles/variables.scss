@@ -1,15 +1,9 @@
-$snow: #FFF9FB;
-$gray: #bec1ca;
-$dark: #252627;
-$blue: #0066cc;
-$fire: #BB0A21;
-
 $colors: (
-    snow: $snow,
-    gray: $gray,
-    dark: $dark,
-    blue: $blue,
-    fire: $fire,
+    "snow": #FFF9FB,
+    "gray": #bec1ca,
+    "dark": #252627,
+    "blue": #0066cc,
+    "fire": #BB0A21,
 ) !default;
 
 // Generic media breakpoints used widely on the internet.
