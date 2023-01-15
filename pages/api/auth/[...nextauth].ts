@@ -29,6 +29,8 @@ export const authOptions: AuthOptions = {
     ],
     callbacks: {
         async session({ session, token }) {
+            // I wouldn't normally like to put the access token in the current session,
+            // but I do not have the spoons to unravel server to server shenanigans for this demo.
             (session as AccessTokenSession).accessToken = (token as AccessTokenJWT).accessToken;
             return session;
         },
