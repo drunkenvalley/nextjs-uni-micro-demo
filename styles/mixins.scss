@@ -47,8 +47,21 @@
     }
 }
 
+@mixin active {
+    &:active, &:visited:active {
+        @content();
+    }
+}
+
+@mixin before {
+    &::before {
+        content: "";
+        @content();
+    }
+}
+
 @mixin hover {
-    &:hover, &:focus {
+    &:hover, &:focus, &:visited:hover, &:visited:focus {
         @content();
     }
 }

@@ -3,15 +3,16 @@ $colors: (
     "gray": #bec1ca,
     "dark": #252627,
     "blue": #0066cc,
-    "fire": #BB0A21,
+    "fire": #ee0000,
+    "purp": #551A8B,
 ) !default;
 
 // Generic media breakpoints used widely on the internet.
 $breakpoints: (
-    sm: 576px,
-    md: 768px,
-    lg: 992px,
-    xl: 1200px,
+    "sm": 576px,
+    "md": 768px,
+    "lg": 992px,
+    "xl": 1200px,
 ) !default;
 
 $directions: (
