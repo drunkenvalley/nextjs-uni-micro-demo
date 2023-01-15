@@ -31,6 +31,7 @@ export const authOptions: AuthOptions = {
         async session({ session, token }) {
             // I wouldn't normally like to put the access token in the current session,
             // but I do not have the spoons to unravel server to server shenanigans for this demo.
+            // Giving myself permission to throw it on the client cuz the Angular repo given also did it. :)
             (session as AccessTokenSession).accessToken = (token as AccessTokenJWT).accessToken;
             return session;
         },
