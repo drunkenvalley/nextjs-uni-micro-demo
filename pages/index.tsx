@@ -1,21 +1,36 @@
 import Head from "next/head"
-import User from "@/components/user"
+import { useSession } from "next-auth/react"
+import UseContacts from "@/services/contacts"
+import { AccessTokenSession } from "@/interfaces/accesstoken";
+import { useEffect } from "react";
 
 export default function Page() {
+    const { data: session } = useSession()
+    const getContacts = async () => await UseContacts({ method: "GET", token: (session as AccessTokenSession)?.accessToken })
+
+    
+
     return (
         <>
             <Head>
                 <title>My Contacts</title>
             </Head>
-            <User />
-            <h2>
-                My Contacts
-            </h2>
-            <p>
-                These are relevant people to reach out to, for one reason or another.
-            </p>
-            <div className="grid gap-1">
-                <article className="border border-gray p-1">#1</article>
+            <div className="flow">
+                <h2 className="mt-4">
+                    My Contacts
+                </h2>
+                <div className="grid gap-1">
+                    <article className="border border-gray p-1">#1</article>
+                </div>
+                <div>
+                {session && (
+                    <div>
+                        <button onClick={getContacts}>
+                            Try fetch
+                        </button>
+                    </div>
+                )}
+                </div>
             </div>
         </>
     )

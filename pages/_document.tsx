@@ -1,3 +1,4 @@
+import Header from "@/components/header"
 import { Html, Head, Main, NextScript } from "next/document"
 
 export default function Document() {
@@ -5,7 +6,7 @@ export default function Document() {
         <Html>
             <Head></Head>
             <body className="bg-snow">
-                <div className="container p-3 flow">
+                <div className="container px-3 flow">
                     <Main />
                 </div>
                 <NextScript />

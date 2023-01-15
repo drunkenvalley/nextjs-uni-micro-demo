@@ -140,4 +140,15 @@ button, .button {
     }
 }
 
+header {
+    margin-block-end: get-size(2);
+    border-width: 1px;
+    border-block-start-width: 0;
+    border-color: get-color("gray");
+    border-style: solid;
+    border-bottom-left-radius: calc(get-size(1));
+    border-bottom-right-radius: calc(get-size(1));
+    padding: get-size(2);
+    text-align: right;
+}
 /* Exception */

@@ -1,3 +1,4 @@
+import { AccessTokenJWT, AccessTokenSession } from "@/interfaces/accesstoken";
 import NextAuth, { AuthOptions } from "next-auth"
 
 export const authOptions: AuthOptions = {
@@ -17,7 +18,6 @@ export const authOptions: AuthOptions = {
             idToken: true,
             checks: ["pkce", "state"],
             profile(profile) {
-                console.log(profile)
                 return {
                     id: profile.sub,
                     name: profile.name,
@@ -26,7 +26,19 @@ export const authOptions: AuthOptions = {
                 }
             }
         }
-    ]
+    ],
+    callbacks: {
+        async session({ session, token }) {
+            (session as AccessTokenSession).accessToken = (token as AccessTokenJWT).accessToken;
+            return session;
+        },
+        async jwt({ token, account }) {
+            if (account) {
+                token.accessToken = account.access_token
+            }
+            return token
+        },
+    }
 }
 
 export default NextAuth(authOptions)

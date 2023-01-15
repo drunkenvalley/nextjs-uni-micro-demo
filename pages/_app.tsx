@@ -1,3 +1,4 @@
+import Header from "@/components/header"
 import "@/styles/main.scss"
 
 import { Poppins } from "@next/font/google"
@@ -21,6 +22,7 @@ export default function App({
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <SessionProvider session={session} refetchInterval={30}>
+                <Header className={poppins.className} />
                 <main className={poppins.className}>
                     <Component {...pageProps} />
                 </main>
