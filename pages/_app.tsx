@@ -9,18 +9,22 @@ const poppins = Poppins({
 })
 
 import { SessionProvider } from "next-auth/react"
+import Head from "next/head"
 
 export default function App({
     Component,
     pageProps: { session, ...pageProps },
 }) {
     return (
-    // `session` comes from `getServerSideProps` or `getInitialProps`.
-    // Avoids flickering/session loading on first load.
-        <SessionProvider session={session} refetchInterval={30}>
-            <main className={poppins.className}>
-                <Component {...pageProps} />
-            </main>
-        </SessionProvider>
+        <>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
+            <SessionProvider session={session} refetchInterval={30}>
+                <main className={poppins.className}>
+                    <Component {...pageProps} />
+                </main>
+            </SessionProvider>
+        </>
     )
 }

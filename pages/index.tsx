@@ -1,4 +1,5 @@
 import Head from "next/head"
+import User from "@/components/user"
 
 export default function Page() {
     return (
@@ -6,6 +7,7 @@ export default function Page() {
             <Head>
                 <title>My Contacts</title>
             </Head>
+            <User />
             <h2>
                 My Contacts
             </h2>
