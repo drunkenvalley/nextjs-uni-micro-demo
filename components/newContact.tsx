@@ -44,32 +44,39 @@ export default function NewContact({ callback }: Partial<Props>) {
     }
 
     return (
-        <section className="create-contact my-3">
-            <h3>New contact</h3>
-            <form onSubmit={onSubmit}>
-                <div>
-                    <label htmlFor="newContactName">
-                        Name
-                    </label>
-                    <input id="newContactName" name="newName" ref={nameRef} required />
-                </div>
+        <form onSubmit={onSubmit} className="contact-block border-blue">
+            <section>
+                <h3 className="mb-1">
+                    <div className="form-field">
+                        <input placeholder="Name*" className="button" id="newContactName" name="newName" ref={nameRef} required />
+                        <label htmlFor="newContactName">
+                            Name<span className="text-fire">*</span>
+                        </label>
+                    </div>
+                </h3>
 
-                <div>
+                <div className="form-field">
+                    <input placeholder="Role" className="button" id="newContactRole" name="newRole" ref={roleRef} />
                     <label htmlFor="newContactRole">
                         Role
                     </label>
-                    <input id="newContactRole" name="newRole" ref={roleRef} />
                 </div>
+            </section>
 
-                <div>
-                    <label htmlFor="newContactEmail">
-                        Email
-                    </label>
-                    <input id="newContactEmail" name="newEmail" ref={emailRef} />
-                </div>
-                <button type="submit">Create</button>
-            </form>
-        </section>
+            <ul role="list">
+                <li className="me-2">
+                    <div className="form-field">
+                        <input placeholder="Email" className="button" id="newContactEmail" name="newEmail" ref={emailRef} />
+                        <label htmlFor="newContactEmail">
+                            Email
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <button type="submit" style={{height: "100%"}}>Create</button>
+                </li>
+            </ul>
+        </form>
     )
 }
 

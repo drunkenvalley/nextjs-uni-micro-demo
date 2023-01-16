@@ -45,7 +45,7 @@ body {
     border-width: .1em;
 
     @include use-map ($colors) using ($value) {
-        border-color: $value;
+        border-color: $value !important;
     }
 }
 
@@ -188,32 +188,32 @@ header {
             flex-grow: 1;
         }
 
+        h3 {
+            display: flex;
+            justify-content: space-between;
+
+            button {
+                line-height: 1rem;
+                padding: calc(get-size(1)*.5);
+                border-color: transparent;
+                color: get-color("fire");
+                transition: var(--template-transition);
+
+                @include hover {
+                    border-color: currentColor;
+                }
+
+                &::before {
+                    content: unset;
+                }
+            }
+        }
+
         ul {
             display: flex;
             list-style-type: none;
             margin: 0;
             padding: 0;
-        }
-    }
-}
-
-.create-contact {
-    form {
-        border-radius: get-size(1);
-        border-color: get-color("gray");
-        border-width: 1px;
-        border-style: solid;
-        padding: get-size(3);
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        gap: get-size(2);
-
-        label {
-            display: block;
-        }
-        button {
-            height: fit-content;
         }
     }
 }
@@ -229,6 +229,41 @@ header {
     border-radius: 50%;
     -webkit-animation: spinner-border .75s linear infinite;
     animation: spinner-border .75s linear infinite;
+}
+
+.form-field {
+    position: relative;
+    label {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        opacity: 1;
+        align-items: center;
+        padding: get-size(1);
+        transform: var(--template-transition);
+    }
+    input {
+        width: 100%;
+
+        &::placeholder {
+            color: transparent;
+        }
+        &:focus, &:active {
+            &::placeholder {
+                color: get-color("gray");
+            }
+            & + label {
+                opacity: 0;
+            }
+        }
+        &:not(:placeholder-shown) + label {
+            opacity: 0;
+        }
+    }
+
 }
 
 /* Exception */
