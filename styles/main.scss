@@ -74,6 +74,12 @@ body {
     }
 }
 
+@keyframes spinner-border {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* Block */
 a {
     transition: var(--template-transition);
@@ -138,6 +144,13 @@ button, .button {
     @include active {
         color: get-color("fire");
     }
+    &[disabled] {
+        color: get-color("gray");
+
+        &::before {
+            content: unset
+        }
+    }
 }
 
 header {
@@ -151,4 +164,71 @@ header {
     padding: get-size(2);
     text-align: right;
 }
+
+.contact {
+    &-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: get-size(2);
+    }
+    
+    &-block {
+        width: 100%;
+        aspect-ratio: 3.370 / 2.125;
+        border-radius: get-size(1);
+        border-color: get-color("gray");
+        border-width: 1px;
+        border-style: solid;
+        padding: get-size(3);
+
+        display: flex;
+        flex-flow: column;
+        
+        section {
+            flex-grow: 1;
+        }
+
+        ul {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.create-contact {
+    form {
+        border-radius: get-size(1);
+        border-color: get-color("gray");
+        border-width: 1px;
+        border-style: solid;
+        padding: get-size(3);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: get-size(2);
+
+        label {
+            display: block;
+        }
+        button {
+            height: fit-content;
+        }
+    }
+}
+
+.spinner {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: .25em solid currentColor;
+    border-right-color: currentcolor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: spinner-border .75s linear infinite;
+    animation: spinner-border .75s linear infinite;
+}
+
 /* Exception */

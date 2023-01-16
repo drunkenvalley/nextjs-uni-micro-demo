@@ -2,13 +2,51 @@ import Head from "next/head"
 import { useSession } from "next-auth/react"
 import UseContacts from "@/services/contacts"
 import { AccessTokenSession } from "@/interfaces/accesstoken";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Contact } from "@/interfaces/contact";
+import NewContact from "@/components/newContact";
 
 export default function Page() {
     const { data: session } = useSession()
-    const getContacts = async () => await UseContacts({ method: "GET", token: (session as AccessTokenSession)?.accessToken })
+    const [contacts, setContacts] = useState<Contact[]>([])
+    const [loading, setLoading] = useState(false)
+    const [showNew, setShowNew] = useState(false)
 
-    
+    const getContacts = async () => {
+        setLoading(true)
+        try {
+            const response = await UseContacts({ method: "GET", token: (session as AccessTokenSession)?.accessToken })
+            if (response.status > 299) throw `Failed fetching contacts | ${response.status} - ${response.statusText}`
+
+            const fetchedContacts: Contact[] = await response.json()
+            setContacts(fetchedContacts)
+        } catch(e) {
+            console.error(e)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const createContact = async (payload: Object) => {
+        try {
+            const response = await UseContacts({ method: "POST", token: (session as AccessTokenSession)?.accessToken, body: payload })
+            if (response.status > 299) throw `Failed fetching contacts | ${response.status} - ${response.statusText}`
+
+            const fetchedContacts: Contact[] = await response.json()
+            setContacts(fetchedContacts)
+        } catch(e) {
+            console.error(e)
+        } finally {
+            getContacts()
+        }
+    }
+
+    useEffect(() => {
+        console.log(session)
+        if ((session as AccessTokenSession)?.accessToken) {
+            getContacts()
+        }
+    }, [(session as AccessTokenSession)?.accessToken])
 
     return (
         <>
@@ -19,18 +57,52 @@ export default function Page() {
                 <h2 className="mt-4">
                     My Contacts
                 </h2>
-                <div className="grid gap-1">
-                    <article className="border border-gray p-1">#1</article>
-                </div>
-                <div>
+                {loading && <div className="spinner my-3 text-blue"></div>}
+                <main className="contact-grid">
+                    {session && !loading && !!contacts.length && (
+                        <>
+                            {/** I would probably redesign this for additional info? Probably. */}
+                            {contacts.map(contact => (
+                                <article key={contact.InfoID} className="contact-block">
+                                    <section>
+                                        <h3>
+                                            {contact.Info?.Name}
+                                        </h3>
+                                        {contact.Role && 
+                                            <p>
+                                                {contact.Role}
+                                            </p>
+                                        }
+                                    </section>
+                                    <ul role="list">
+                                        {contact.Info?.DefaultEmail?.EmailAddress && 
+                                        <li>
+                                            <a href={`mailto:${contact.Info?.DefaultEmail?.EmailAddress}`}>
+                                                {contact.Info?.DefaultEmail?.EmailAddress}
+                                            </a>
+                                        </li>
+                                        }
+                                    </ul>
+                                </article>
+                            ))}
+                        </>
+                    )}
+                </main>
                 {session && (
-                    <div>
-                        <button onClick={getContacts}>
-                            Try fetch
-                        </button>
-                    </div>
+                    <>
+                        <div>
+                            <button className="me-1" onClick={() => setShowNew(prev => !prev)}>
+                                New
+                            </button>
+                            <button onClick={getContacts}>
+                                Refresh
+                            </button>
+                        </div>
+                        {showNew && (
+                            <NewContact callback={createContact} />
+                        )}
+                    </>
                 )}
-                </div>
             </div>
         </>
     )
