@@ -12,6 +12,7 @@ export default function NewContact({ callback }: Partial<Props>) {
 
     const onSubmit: FormEventHandler = event => {
         event.preventDefault()
+        event.stopPropagation()
 
         // This way feels clumsy; should be revisited
         let email
@@ -35,11 +36,15 @@ export default function NewContact({ callback }: Partial<Props>) {
             }
         }
 
-        if (callback) callback(payload)
+        if (callback) {
+            callback(payload)
+        }
+
+        (event.target as HTMLFormElement).reset()
     }
 
     return (
-        <section className="create-contact mt-3">
+        <section className="create-contact my-3">
             <h3>New contact</h3>
             <form onSubmit={onSubmit}>
                 <div>
