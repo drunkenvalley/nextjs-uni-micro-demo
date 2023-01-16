@@ -80,6 +80,13 @@ body {
     }
 }
 
+.align-items-end {
+    align-items: flex-end;
+}
+.justify-space-between {
+    justify-content: space-between;
+}
+
 /* Block */
 a {
     transition: var(--template-transition);
@@ -267,3 +274,20 @@ header {
 }
 
 /* Exception */
+button.contact-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-style: dashed;
+
+    @include before {
+        bottom: get-size(3);
+        left: get-size(3);
+    }
+
+    @include hover {
+        @include before {
+            right: 40%;
+        }
+    }
+}

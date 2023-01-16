@@ -54,9 +54,20 @@ export default function Page() {
                 <title>My Contacts</title>
             </Head>
             <div className="flow">
-                <h2 className="mt-4">
-                    My Contacts
-                </h2>
+                <div className="flex align-items-end justify-space-between">
+                    <h2 className="mt-4">
+                        My Contacts
+                    </h2>
+                    {session && (
+                        <>
+                            <div>
+                                <button onClick={getContacts}>
+                                    Refresh
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
                 {loading && <div className="spinner my-3 text-blue"></div>}
                 <main className="contact-grid">
                     {session && !loading && !!contacts.length && (
@@ -92,22 +103,17 @@ export default function Page() {
                             ))}
                         </>
                     )}
-                    {showNew && (
+                    {session && showNew && (
                         <NewContact callback={createContact} />
                     )}
-                </main>
-                {session && (
-                    <>
-                        <div>
-                            <button className="me-1" onClick={() => setShowNew(prev => !prev)}>
+                    {session &&
+                        <button className="contact-block" onClick={() => setShowNew(prev => !prev)}>
+                            <h3>
                                 New
-                            </button>
-                            <button onClick={getContacts}>
-                                Refresh
-                            </button>
-                        </div>
-                    </>
-                )}
+                            </h3>
+                        </button>
+                    }
+                </main>
             </div>
         </>
     )
