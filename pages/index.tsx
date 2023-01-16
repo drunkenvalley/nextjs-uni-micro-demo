@@ -12,6 +12,17 @@ export default function Page() {
     const [loading, setLoading] = useState(false)
     const [showNew, setShowNew] = useState(false)
 
+    const contactsApi = async ({ method, body, params }: { method: string, body?: Object, params?: string }) => {
+        try {
+            const response = await UseContacts({ method, token: (session as AccessTokenSession)?.accessToken, body, params })
+            if (response.status > 299) throw `Failed running operation | ${response.status} - ${response.statusText}`
+        } catch(e) {
+            console.error(e)
+        } finally {
+            getContacts()
+        }
+    }
+
     const getContacts = async () => {
         setLoading(true)
         try {
@@ -27,19 +38,8 @@ export default function Page() {
         }
     }
 
-    const createContact = async (payload: Object) => {
-        try {
-            const response = await UseContacts({ method: "POST", token: (session as AccessTokenSession)?.accessToken, body: payload })
-            if (response.status > 299) throw `Failed fetching contacts | ${response.status} - ${response.statusText}`
-
-            const fetchedContacts: Contact[] = await response.json()
-            setContacts(fetchedContacts)
-        } catch(e) {
-            console.error(e)
-        } finally {
-            getContacts()
-        }
-    }
+    const createContact = async (payload: Object) => contactsApi({ method: "POST", body: payload })
+    const deleteContact = async (contact: Contact) => contactsApi({ method: "DELETE", params: "/" + contact.ID })
 
     useEffect(() => {
         console.log(session)
@@ -73,6 +73,11 @@ export default function Page() {
                                                 {contact.Role}
                                             </p>
                                         }
+                                        <button onClick={() => deleteContact(contact)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
+                                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                                            </svg>
+                                        </button>
                                     </section>
                                     <ul role="list">
                                         {contact.Info?.DefaultEmail?.EmailAddress && 
