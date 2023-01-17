@@ -3,12 +3,13 @@ import { useSession } from "next-auth/react"
 import UseContacts from "@/services/contacts"
 import { AccessTokenSession } from "@/interfaces/accesstoken";
 import { useEffect, useRef, useState } from "react";
-import { Contact } from "@/interfaces/contact";
-import NewContact from "@/components/newContact";
+import { Contact as IContact } from "@/interfaces/contact";
+import EditContact from "@/components/editContact";
+import Contact from "@/components/contact";
 
 export default function Page() {
     const { data: session } = useSession()
-    const [contacts, setContacts] = useState<Contact[]>([])
+    const [contacts, setContacts] = useState<IContact[]>([])
     const [loading, setLoading] = useState(false)
     const [showNew, setShowNew] = useState(false)
 
@@ -30,7 +31,7 @@ export default function Page() {
             const response = await UseContacts({ method: "GET", token: (session as AccessTokenSession)?.accessToken })
             if (response.status > 299) throw `Failed fetching contacts | ${response.status} - ${response.statusText}`
 
-            const fetchedContacts: Contact[] = await response.json()
+            const fetchedContacts: IContact[] = await response.json()
             setContacts(fetchedContacts)
         } catch(e) {
             console.error(e)
@@ -40,7 +41,11 @@ export default function Page() {
     }
 
     const createContact = async (payload: Object) => contactsApi({ method: "POST", body: payload, next: () => setShowNew(false) })
-    const deleteContact = async (contact: Contact) => contactsApi({ method: "DELETE", params: "/" + contact.ID })
+    const updateContact = async (contact: IContact) => {
+        const { ID, ...rest } = contact
+        contactsApi({ method: "PUT", body: rest, params: "/" + ID })
+    }
+    const deleteContact = async (contact: IContact) => contactsApi({ method: "DELETE", params: "/" + contact.ID })
 
     useEffect(() => {
         console.log(session)
@@ -79,44 +84,12 @@ export default function Page() {
                         <>
                             {/** I would probably redesign this for additional info? Probably. */}
                             {contacts.map(contact => (
-                                <article key={contact.InfoID} className="contact-block">
-                                    <section>
-                                        <h3>
-                                            <span>{contact.Info?.Name}</span>
-                                            <div className="flex">
-                                                <button className="icon text-blue">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
-                                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                                                    </svg>
-                                                </button>
-                                                <button className="icon text-fire" onClick={() => deleteContact(contact)}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
-                                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </h3>
-                                        {contact.Role && 
-                                            <p>
-                                                {contact.Role}
-                                            </p>
-                                        }
-                                    </section>
-                                    <ul role="list">
-                                        {contact.Info?.DefaultEmail?.EmailAddress && 
-                                        <li>
-                                            <a href={`mailto:${contact.Info?.DefaultEmail?.EmailAddress}`}>
-                                                {contact.Info?.DefaultEmail?.EmailAddress}
-                                            </a>
-                                        </li>
-                                        }
-                                    </ul>
-                                </article>
+                                <Contact key={contact.ID} contact={contact} deleteFn={() => deleteContact(contact)} saveFn={updateContact} />
                             ))}
                         </>
                     )}
                     {session && showNew && (
-                        <NewContact callback={createContact} />
+                        <EditContact closeFn={() => setShowNew(false)} saveFn={createContact}>Create</EditContact>
                     )}
                     {session &&
                         <button className="contact-block" onClick={() => setShowNew(prev => !prev)}>
