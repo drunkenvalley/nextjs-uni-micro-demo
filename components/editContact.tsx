@@ -1,17 +1,15 @@
-import { Contact } from "@/interfaces/contact"
+import { Contact as IContact } from "@/interfaces/contact"
 import { FormEventHandler, MouseEventHandler, ReactNode, useRef } from "react"
+import merge from "deepmerge"
 
 interface Props {
     children: ReactNode
+    contact: IContact
     closeFn: MouseEventHandler
     saveFn: Function
-    id: number
-    name: string
-    role: string
-    email: string
 }
 
-export default function NewContact({ children, closeFn, saveFn, id, name, role, email }: Partial<Props>) {
+export default function NewContact({ children, contact, closeFn, saveFn }: Partial<Props>) {
     const idRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
     const roleRef = useRef<HTMLInputElement>(null)
@@ -38,7 +36,7 @@ export default function NewContact({ children, closeFn, saveFn, id, name, role, 
             }
         }
 
-        const payload = {
+        const modified = {
             ...id,
             ...role,
             Info: {
@@ -46,6 +44,8 @@ export default function NewContact({ children, closeFn, saveFn, id, name, role, 
                 ...email
             }
         }
+        const payload = merge(contact, modified)
+        
 
         if (saveFn) {
             saveFn(payload)
@@ -56,11 +56,11 @@ export default function NewContact({ children, closeFn, saveFn, id, name, role, 
 
     return (
         <form onSubmit={onSubmit} className="contact-block border-blue">
-            <input type="hidden" ref={idRef} defaultValue={id} />
+            <input type="hidden" ref={idRef} defaultValue={contact?.ID} />
             <section>
                 <h3 className="mb-1">
                     <div className="form-field">
-                        <input placeholder="Name*" className="button" id="newContactName" name="newName" ref={nameRef} defaultValue={name} required />
+                        <input placeholder="Name*" className="button" id="newContactName" name="newName" ref={nameRef} defaultValue={contact?.Info?.Name} required />
                         <label htmlFor="newContactName">
                             Name<span className="text-fire">*</span>
                         </label>
@@ -68,7 +68,7 @@ export default function NewContact({ children, closeFn, saveFn, id, name, role, 
                 </h3>
 
                 <div className="form-field">
-                    <input placeholder="Role" className="button" id="newContactRole" name="newRole" defaultValue={role} ref={roleRef} />
+                    <input placeholder="Role" className="button" id="newContactRole" name="newRole" defaultValue={contact?.Role} ref={roleRef} />
                     <label htmlFor="newContactRole">
                         Role
                     </label>
@@ -78,7 +78,7 @@ export default function NewContact({ children, closeFn, saveFn, id, name, role, 
             <ul role="list">
                 <li className="me-2">
                     <div className="form-field">
-                        <input placeholder="Email" className="button" id="newContactEmail" name="newEmail" defaultValue={email} ref={emailRef} />
+                        <input placeholder="Email" className="button" id="newContactEmail" name="newEmail" defaultValue={contact?.Info?.DefaultEmail?.EmailAddress} ref={emailRef} />
                         <label htmlFor="newContactEmail">
                             Email
                         </label>

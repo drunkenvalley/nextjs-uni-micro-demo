@@ -41,10 +41,7 @@ export default function Page() {
     }
 
     const createContact = async (payload: Object) => contactsApi({ method: "POST", body: payload, next: () => setShowNew(false) })
-    const updateContact = async (contact: IContact) => {
-        const { ID, ...rest } = contact
-        contactsApi({ method: "PUT", body: rest, params: "/" + ID })
-    }
+    const updateContact = async (contact: IContact) => contactsApi({ method: "PUT", body: contact, params: "/" + contact.ID })
     const deleteContact = async (contact: IContact) => contactsApi({ method: "DELETE", params: "/" + contact.ID })
 
     useEffect(() => {
